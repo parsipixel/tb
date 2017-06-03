@@ -1,0 +1,20 @@
+{
+    "name": "ali/tb",
+    "description": "Telegram bot",
+    "require": {
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-0": {
+            "App\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ali",
+            "email": "nazari.dev@gmail.com"
+        }
+    ]
+}

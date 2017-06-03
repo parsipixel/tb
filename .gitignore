@@ -1,5 +1,13 @@
-# Created by .ignore support plugin (hsz.mobi)
+### OSX template
+*.DS_Store
+.AppleDouble
+.LSOverride
 *~
 .DS_Store
 
-/vendor
+# Thumbnails
+._*
+
+vendor/
+.idea/
+ngrok
