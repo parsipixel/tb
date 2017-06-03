@@ -84,7 +84,7 @@ class Telegram extends TelegramTools
             $params['parse_mode'] = 'Markdown';
         }
         if ($reply_markup) {
-            $params['reply_markup'] = $this->buildInlineKeyBoard($reply_markup);
+            $params['reply_markup'] = $reply_markup;
         }
 
         $response = $this->client->send(new Request('post', $this->get(self::SEND_MESSAGE)), ['form_params' => $params]);

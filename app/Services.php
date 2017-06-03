@@ -19,10 +19,10 @@ class Services
     /**
      * @var Telegram
      */
-    public $url;
+    public $t;
 
     public function constructor()
     {
-        $this->url = new Telegram();
+        $this->t = new Telegram();
     }
 }

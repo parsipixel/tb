@@ -26,7 +26,7 @@ class Process extends Services
 
     public function init()
     {
-        $content = $this->url->getUpdates();
+        $content = $this->t->getUpdates();
         if ($content) {
             foreach ($content->result as $update) {
                 $this->handle($update);
@@ -41,14 +41,29 @@ class Process extends Services
     {
         $update = new Update($update->update_id, $update->message);
         switch ($update->getMessage()->getText()) {
+//            case 'ddd':
+//                $mu = [
+//                    [
+//                        $this->t->buildInlineKeyboardButton('1', 'http://tb.app'),
+//                        $this->t->buildInlineKeyboardButton('2', null, 'Callback_Data')
+//                    ]
+//                ];
+//                $response = $this->t->sendMessage($update->getMessage()->getChat()->getId(), '*SALAM!*', Telegram::MESSAGE_MARKDOWN, $mu);
+//                var_dump(json_decode($response->getBody()->getContents())->result);
+//                die();
             case 'ddd':
                 $mu = [
                     [
-                        $this->url->buildInlineKeyboardButton('1', 'http://tb.app'),
-                        $this->url->buildInlineKeyboardButton('2', null, 'Callback_Data')
+                        $this->t->buildInlineKeyboardButton('text'),
+                        $this->t->buildInlineKeyboardButton('lol')
                     ]
                 ];
-                $response = $this->url->sendMessage($update->getMessage()->getChat()->getId(), '*SALAM!*', Telegram::MESSAGE_MARKDOWN, $mu);
+                $response = $this->t->sendMessage(
+                    $update->getMessage()->getChat()->getId(),
+                    '*SALAM!*',
+                    Telegram::MESSAGE_MARKDOWN,
+                    $this->t->buildKeyBoard($mu, true)
+                );
                 var_dump(json_decode($response->getBody()->getContents())->result);
                 die();
         }

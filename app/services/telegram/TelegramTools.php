@@ -14,32 +14,45 @@ namespace App\Services\Telegram;
  */
 class TelegramTools
 {
-    /// Set an InlineKeyBoard
+    const REPLY_INLINE_KEYBOARD = 'inline_keyboard';
+    const REPLY_KEYBOARD = 'keyboard';
+
     /** This object represents an inline keyboard that appears right next to the message it belongs to.
-     * \param $options Array of Array of InlineKeyboardButton; Array of button rows, each represented by an Array of InlineKeyboardButton
-     * \return the requested keyboard as Json
      * @param array $options
      * @return string
      */
     public function buildInlineKeyBoard(array $options)
     {
-        $replyMarkup = [
-            'inline_keyboard' => $options,
-        ];
-        $encodedMarkup = json_encode($replyMarkup, true);
+        $encodedMarkup = json_encode(
+            [
+                self::REPLY_INLINE_KEYBOARD => $options
+            ],
+            true);
         return $encodedMarkup;
     }
 
-    /// Create an InlineKeyboardButton
+    /** This object represents an keyboard that appears instead of keyboard.
+     * @param array $options
+     * @param bool $resizeKeyBoard
+     * @param bool $one_time_keyboard
+     * @param bool $selective
+     * @return string
+     */
+    public function buildKeyBoard(array $options, $resizeKeyBoard = false, $one_time_keyboard = false, $selective = false)
+    {
+        $encodedMarkup = json_encode(
+            [
+                self::REPLY_KEYBOARD => $options,
+                'resize_keyboard' => $resizeKeyBoard,
+                'one_time_keyboard' => $one_time_keyboard,
+                'selective' => $selective
+            ],
+            true
+        );
+        return $encodedMarkup;
+    }
+
     /** This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
-     * \param $text String; Array of button rows, each represented by an Array of Strings
-     * \param $url String Optional. HTTP url to be opened when button is pressed
-     * \param $callback_data String Optional. Data to be sent in a callback query to the bot when button is pressed
-     * \param $switch_inline_query String Optional. If set, pressing the button will prompt the user to select one of their chats, open that chat and insert the bot‘s username and the specified inline query in the input field. Can be empty, in which case just the bot’s username will be inserted.
-     * \param $switch_inline_query_current_chat String Optional. Optional. If set, pressing the button will insert the bot‘s username and the specified inline query in the current chat's input field. Can be empty, in which case only the bot’s username will be inserted.
-     * \param $callback_game  String Optional. Description of the game that will be launched when the user presses the button.
-     * \param $pay  Boolean Optional. Specify True, to send a <a href="https://core.telegram.org/bots/api#payments">Pay button</a>.
-     * \return the requested button as Array
      * @param $text
      * @param string $url
      * @param string $callback_data
