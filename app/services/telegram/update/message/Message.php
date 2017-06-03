@@ -5,7 +5,8 @@
  * Initial version by: Ali
  * Initial version created on: 5/27/17
  */
-namespace App\Update\Message;
+
+namespace App\Services\Telegram\Update\Message;
 
 /**
  * Class Message

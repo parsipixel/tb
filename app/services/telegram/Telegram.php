@@ -6,7 +6,7 @@
  * Initial version created on: 5/27/17
  */
 
-namespace App\Services;
+namespace App\Services\Telegram;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
@@ -15,7 +15,7 @@ use GuzzleHttp\Psr7\Request;
  * Class Url
  * @package App\Services
  */
-class Url
+class Telegram
 {
     const GET_UPDATES = 'getUpdates';
     const SET_WEBHOOK = 'setWebhook';

@@ -7,9 +7,8 @@
  */
 namespace App;
 
-use App\Services\Services;
-use App\Services\Url;
-use App\Update\Update;
+use App\Services\Telegram\Telegram;
+use App\Services\Telegram\Update\Update;
 
 /**
  * Class Process
@@ -49,7 +48,7 @@ class Process extends Services
                         $this->url->buildInlineKeyboardButton('2', null, 'Callback_Data')
                     ]
                 ];
-                $response = $this->url->sendMessage($update->getMessage()->getChat()->getId(), '*SALAM!*', Url::MESSAGE_MARKDOWN, $mu);
+                $response = $this->url->sendMessage($update->getMessage()->getChat()->getId(), '*SALAM!*', Telegram::MESSAGE_MARKDOWN, $mu);
                 var_dump(json_decode($response->getBody()->getContents())->result);
                 die();
         }

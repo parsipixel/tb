@@ -6,7 +6,9 @@
  * Initial version created on: 5/27/17
  */
 
-namespace App\Services;
+namespace App;
+
+use App\Services\Telegram\Telegram;
 
 /**
  * Class Services
@@ -15,12 +17,12 @@ namespace App\Services;
 class Services
 {
     /**
-     * @var Url
+     * @var Telegram
      */
     public $url;
 
     public function constructor()
     {
-        $this->url = new Url();
+        $this->url = new Telegram();
     }
 }

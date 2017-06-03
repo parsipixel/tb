@@ -1,18 +1,18 @@
 <?php
 /**
- * tb - From.php
+ * tb - Chat.php
  *
  * Initial version by: Ali
  * Initial version created on: 5/27/17
  */
 
-namespace App\Update\Message;
+namespace App\Services\Telegram\Update\Message;
 
 /**
- * Class From
+ * Class Chat
  * @package App\Update\Message
  */
-class From
+class Chat
 {
     /**
      * @var int
@@ -29,18 +29,18 @@ class From
     /**
      * @var string
      */
-    private $language_code;
+    private $type;
 
     /**
-     * From constructor.
-     * @param $from
+     * Chat constructor.
+     * @param $chat
      */
-    public function __construct($from)
+    public function __construct($chat)
     {
-        $this->id = $from->id;
-        $this->first_name = $from->first_name;
-        $this->username = $from->username;
-        $this->language_code = $from->language_code;
+        $this->id = $chat->id;
+        $this->first_name = $chat->first_name;
+        $this->username = $chat->username;
+        $this->type = $chat->type;
     }
 
     /**
@@ -94,16 +94,16 @@ class From
     /**
      * @return string
      */
-    public function getLanguageCode()
+    public function getType()
     {
-        return $this->language_code;
+        return $this->type;
     }
 
     /**
-     * @param string $language_code
+     * @param string $type
      */
-    public function setLanguageCode($language_code)
+    public function setType($type)
     {
-        $this->language_code = $language_code;
+        $this->type = $type;
     }
 }
