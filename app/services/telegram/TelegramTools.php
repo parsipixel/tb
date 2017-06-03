@@ -52,6 +52,32 @@ class TelegramTools
         return $encodedMarkup;
     }
 
+    /**
+     * @param bool $selective
+     * @return string
+     */
+    public function removeKeyBoard($selective = false)
+    {
+        $encodedMarkup = json_encode([
+            'remove_keyboard' => true,
+            'selective' => $selective
+        ], true);
+        return $encodedMarkup;
+    }
+
+    /**
+     * @param bool $selective
+     * @return string
+     */
+    public function forceReply($selective = false)
+    {
+        $encodedMarkup = json_encode([
+            'force_reply' => true,
+            'selective' => $selective
+        ], true);
+        return $encodedMarkup;
+    }
+
     /** This object represents one button of an inline keyboard. You must use exactly one of the optional fields.
      * @param $text
      * @param string $url

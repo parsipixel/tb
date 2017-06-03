@@ -51,18 +51,36 @@ class Process extends Services
 //                $response = $this->t->sendMessage($update->getMessage()->getChat()->getId(), '*SALAM!*', Telegram::MESSAGE_MARKDOWN, $mu);
 //                var_dump(json_decode($response->getBody()->getContents())->result);
 //                die();
+//            case 'ddd':
+//                $mu = [
+//                    [
+//                        $this->t->buildInlineKeyboardButton('text'),
+//                        $this->t->buildInlineKeyboardButton('lol')
+//                    ]
+//                ];
+//                $response = $this->t->sendMessage(
+//                    $update->getMessage()->getChat()->getId(),
+//                    '*SALAM!*',
+//                    Telegram::MESSAGE_MARKDOWN,
+//                    $this->t->buildKeyBoard($mu, true)
+//                );
+//                var_dump(json_decode($response->getBody()->getContents())->result);
+//                die();
+//            case 'ddd':
+//                $response = $this->t->sendMessage(
+//                    $update->getMessage()->getChat()->getId(),
+//                    '*SALAM!*',
+//                    Telegram::MESSAGE_MARKDOWN,
+//                    $this->t->removeKeyBoard()
+//                );
+//                var_dump(json_decode($response->getBody()->getContents())->result);
+//                die();
             case 'ddd':
-                $mu = [
-                    [
-                        $this->t->buildInlineKeyboardButton('text'),
-                        $this->t->buildInlineKeyboardButton('lol')
-                    ]
-                ];
                 $response = $this->t->sendMessage(
                     $update->getMessage()->getChat()->getId(),
                     '*SALAM!*',
                     Telegram::MESSAGE_MARKDOWN,
-                    $this->t->buildKeyBoard($mu, true)
+                    $this->t->forceReply()
                 );
                 var_dump(json_decode($response->getBody()->getContents())->result);
                 die();
