@@ -40,7 +40,7 @@ class From
         $this->id = $from->id;
         $this->first_name = $from->first_name;
         $this->username = $from->username;
-        $this->language_code = $from->language_code;
+        $this->language_code = property_exists($from, 'language_code') ? $from->language_code : null;
     }
 
     /**

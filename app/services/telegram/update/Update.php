@@ -24,16 +24,26 @@ class Update
      * @var Message
      */
     private $message;
+    /**
+     * @var CallbackQuery
+     */
+    private $callback_query;
 
     /**
      * Update constructor.
      * @param $update_id
      * @param $message
+     * @param null $callback_query
      */
-    public function __construct($update_id, $message)
+    public function __construct($update_id, $message = null, $callback_query = null)
     {
         $this->update_id = $update_id;
-        $this->message = new Message($message);
+        if ($message) {
+            $this->message = new Message((object)$message);
+        }
+        if ($callback_query) {
+            $this->callback_query = new CallbackQuery((object)$callback_query);
+        }
     }
 
     /**
@@ -66,5 +76,21 @@ class Update
     public function setMessage($message)
     {
         $this->message = $message;
+    }
+
+    /**
+     * @return CallbackQuery
+     */
+    public function getCallbackQuery()
+    {
+        return $this->callback_query;
+    }
+
+    /**
+     * @param mixed $callback_query
+     */
+    public function setCallbackQuery($callback_query)
+    {
+        $this->callback_query = $callback_query;
     }
 }

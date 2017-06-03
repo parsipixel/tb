@@ -42,8 +42,8 @@ class Message
     public function __construct($message)
     {
         $this->message_id = $message->message_id;
-        $this->from = new From($message->from);
-        $this->chat = new Chat($message->chat);
+        $this->from = new From((object)$message->from);
+        $this->chat = new Chat((object)$message->chat);
         $this->date = $message->date;
         $this->text = $message->text;
     }
