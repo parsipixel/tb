@@ -9,8 +9,6 @@ namespace App;
 
 use App\Services\Services;
 use App\Update\Update;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
 
 /**
  * Class Process
@@ -42,18 +40,10 @@ class Process extends Services
     public function handle($update)
     {
         $update = new Update($update->update_id, $update->message);
-
         switch ($update->getMessage()->getText()) {
             case 'ddd':
-                $client = new Client();
-                $response = $client->send(new Request('post', $this->url->get('sendMessage')), [
-                    'form_params' => [
-                        'chat_id' => $update->getMessage()->getChat()->getId(),
-                        'text' => '111'
-                    ]
-                ]);
-                $content = json_decode($response->getBody()->getContents());
-                var_dump($content);
+                $response = $this->url->sendMessage($update->getMessage()->getChat()->getId(), '*SALAM!*');
+                var_dump(json_decode($response->getBody()->getContents())->result);
                 die();
         }
     }
