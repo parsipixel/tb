@@ -8,6 +8,7 @@
 namespace App;
 
 use App\Services\Services;
+use App\Services\Url;
 use App\Update\Update;
 
 /**
@@ -42,7 +43,13 @@ class Process extends Services
         $update = new Update($update->update_id, $update->message);
         switch ($update->getMessage()->getText()) {
             case 'ddd':
-                $response = $this->url->sendMessage($update->getMessage()->getChat()->getId(), '*SALAM!*');
+                $mu = [
+                    [
+                        $this->url->buildInlineKeyboardButton('1', 'http://tb.app'),
+                        $this->url->buildInlineKeyboardButton('2', null, 'Callback_Data')
+                    ]
+                ];
+                $response = $this->url->sendMessage($update->getMessage()->getChat()->getId(), '*SALAM!*', Url::MESSAGE_MARKDOWN, $mu);
                 var_dump(json_decode($response->getBody()->getContents())->result);
                 die();
         }

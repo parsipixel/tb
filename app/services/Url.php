@@ -23,6 +23,9 @@ class Url
     const SEND_MESSAGE = 'sendMessage';
     const DELETE_MESSAGE = 'deleteMessage';
 
+    const MESSAGE_MARKDOWN = 'Markdown';
+    const MESSAGE_HTML = 'HTML';
+
     private $client;
 
     /**
@@ -63,22 +66,21 @@ class Url
         return false;
     }
 
-    public function sendMessage($chatId, $message)
+    public function sendMessage($chatId, $message, $parse_mode = null, $reply_markup = null)
     {
-        $options = [
-            [
-                $this->buildInlineKeyboardButton('1', 'http://tb.app'), $this->buildInlineKeyboardButton('2', 'http://tb.app')
-            ]
+        $params = [
+            'chat_id' => $chatId,
+            'text' => $message
         ];
 
-        $response = $this->client->send(new Request('post', $this->get(self::SEND_MESSAGE)), [
-            'form_params' => [
-                'chat_id' => $chatId,
-                'text' => $message,
-                'parse_mode' => 'Markdown',
-                'reply_markup' => $this->buildInlineKeyBoard($options)
-            ]
-        ]);
+        if ($parse_mode) {
+            $params['parse_mode'] = 'Markdown';
+        }
+        if ($reply_markup) {
+            $params['reply_markup'] = $this->buildInlineKeyBoard($reply_markup);
+        }
+
+        $response = $this->client->send(new Request('post', $this->get(self::SEND_MESSAGE)), ['form_params' => $params]);
         return $response;
     }
 
@@ -122,17 +124,17 @@ class Url
         $replyMarkup = [
             'text' => $text
         ];
-        if ($url != "") {
+        if ($url) {
             $replyMarkup['url'] = $url;
-        } else if ($callback_data != "") {
+        } else if ($callback_data) {
             $replyMarkup['callback_data'] = $callback_data;
-        } else if ($switch_inline_query != "") {
+        } else if ($switch_inline_query) {
             $replyMarkup['switch_inline_query'] = $switch_inline_query;
-        } else if ($switch_inline_query_current_chat != "") {
+        } else if ($switch_inline_query_current_chat) {
             $replyMarkup['switch_inline_query_current_chat'] = $switch_inline_query_current_chat;
-        } else if ($callback_game != "") {
+        } else if ($callback_game) {
             $replyMarkup['callback_game'] = $callback_game;
-        } else if ($pay != "") {
+        } else if ($pay) {
             $replyMarkup['pay'] = $pay;
         }
         return $replyMarkup;
