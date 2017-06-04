@@ -11,5 +11,4 @@ $dotEnv->load();
 define('TOKEN', getenv('TB_TOKEN'));
 
 $process = new Process();
-$process->constructor();
 $process->init();

@@ -29,6 +29,7 @@ class CallbackHandler extends Services
      */
     public function __construct(Update $update)
     {
+        parent::__construct();
         $this->update = $update;
     }
 

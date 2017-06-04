@@ -26,7 +26,7 @@ class Services
      */
     protected $logger;
 
-    public function constructor()
+    public function __construct()
     {
         $this->t = new Telegram();
         $this->logger = new Logger\File('logs/' . date('Y-m-d') . '.log');

@@ -19,9 +19,18 @@ use App\Services\Telegram\Update\Update;
  */
 class Process extends Services
 {
+
+    /**
+     * Process constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function init()
     {
-        if (getenv('USE_WEBHOOK')) {
+        if ((bool)getenv('USE_WEBHOOK')) {
             $rawData = file_get_contents("php://input");
             try {
                 $this->handle((object)json_decode($rawData, true));
