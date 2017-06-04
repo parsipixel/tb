@@ -1,0 +1,23 @@
+#!/bin/bash
+function usage {
+cat << EOF
+
+  $(printf "\e[32m USAGE: \e[39m")
+    $0 [command]
+
+  $(printf "\e[32m Available commands: \e[39m")
+    log                      tail -f on the error-log
+
+EOF
+    exit 1
+}
+
+case $1 in
+  "log")
+    printf "\n\t \e[31mYESS! \e[39m\n\n"
+    tail -f ./logs/*
+  ;;
+  *)
+    usage
+  ;;
+esac
