@@ -7,6 +7,9 @@
  */
 namespace App;
 
+use App\Services\Telegram\Handlers\CallbackHandler;
+use App\Services\Telegram\Handlers\InlineQueryHandler;
+use App\Services\Telegram\Handlers\MessageHandler;
 use App\Services\Telegram\Telegram;
 use App\Services\Telegram\Update\Update;
 
@@ -16,41 +19,35 @@ use App\Services\Telegram\Update\Update;
  */
 class Process extends Services
 {
-    /**
-     * Process constructor.
-     */
-    public function __construct()
-    {
-        parent::constructor();
-    }
-
     public function init()
     {
-//        $content = $this->t->getUpdates();
-//        if ($content) {
-////            var_dump($content->result);
-////            die();
-//            foreach ($content->result as $update) {
-//                try {
-//                    $this->handle($update);
-//                } catch (\Exception $e) {
-//                    $f = fopen('log.txt', 'a');
-//                    fputs($f, $e->getMessage() . PHP_EOL);
-//                    fclose($f);
-//                    var_dump($update);
-//                    echo $e->getMessage() . PHP_EOL;
-//                }
-//            }
-//        }
-
-        $rawData = file_get_contents("php://input");
-        try {
-            $this->handle((object)json_decode($rawData, true));
-        } catch (\Exception $e) {
-            $f = fopen('log.txt', 'a');
-            fputs($f, $e->getMessage() . PHP_EOL);
-            fclose($f);
-            echo $e->getMessage() . PHP_EOL;
+        if (getenv('USE_WEBHOOK')) {
+            $rawData = file_get_contents("php://input");
+            try {
+                $this->handle((object)json_decode($rawData, true));
+            } catch (\Exception $e) {
+                $f = fopen('log.txt', 'a');
+                fputs($f, $e->getMessage() . PHP_EOL);
+                fclose($f);
+                echo $e->getMessage() . PHP_EOL;
+            }
+        } else {
+            $content = $this->t->getUpdates();
+            if ($content) {
+//            var_dump($content->result);
+//            die();
+                foreach ($content->result as $update) {
+                    try {
+                        $this->handle($update);
+                    } catch (\Exception $e) {
+                        $f = fopen('log.txt', 'a');
+                        fputs($f, $e->getMessage() . PHP_EOL);
+                        fclose($f);
+                        var_dump($update);
+                        echo $e->getMessage() . PHP_EOL;
+                    }
+                }
+            }
         }
     }
 
@@ -61,120 +58,16 @@ class Process extends Services
     {
         if (property_exists($update, 'message')) {
             $update = new Update($update->update_id, $update->message);
-            $this->messageHandlers($update);
+            $messageHandler = new MessageHandler($update);
+            $messageHandler->handle();
         } elseif (property_exists($update, 'callback_query')) {
             $update = new Update($update->update_id, null, $update->callback_query);
-            $this->callbackQueryHandlers($update);
+            $callbackHandler = new CallbackHandler($update);
+            $callbackHandler->handle();
         } elseif (property_exists($update, 'inline_query')) {
             $update = new Update($update->update_id, null, null, $update->inline_query);
-            $this->inlineQueryHandlers($update);
-        }
-    }
-
-    public function messageHandlers(Update $update)
-    {
-        if ($update->getMessage()->getEntities()) {
-            foreach ($update->getMessage()->getEntities() as $entity) {
-                $entity = (object)$entity;
-                if ($entity->type == 'url') {
-                    $response = $this->t->deleteMessage($update->getMessage()->getChat()->getId(), $update->getMessage()->getMessageId());
-//                    var_dump(json_decode($response->getBody()->getContents())->result);
-//                    die();
-                }
-            }
-        }
-        switch ($update->getMessage()->getText()) {
-            case 'ddd':
-                $mu = [
-                    [
-                        $this->t->buildInlineKeyboardButton('1', 'http://tb.app'),
-                        $this->t->buildInlineKeyboardButton('2', null, 'Callback_Data')
-                    ]
-                ];
-                $response = $this->t->sendMessage($update->getMessage()->getChat()->getId(), '*SAdddLAM!*', Telegram::MESSAGE_MARKDOWN, $this->t->buildInlineKeyBoard($mu));
-                var_dump(json_decode($response->getBody()->getContents())->result);
-//                die();
-//            case 'Callback_Data':
-//                $mu = [
-//                    [
-//                        $this->t->buildInlineKeyboardButton('text'),
-//                        $this->t->buildInlineKeyboardButton('lol')
-//                    ]
-//                ];
-//                $response = $this->t->sendMessage(
-//                    $update->getMessage()->getChat()->getId(),
-//                    '*CCC!*',
-//                    Telegram::MESSAGE_MARKDOWN,
-//                    $this->t->buildKeyBoard($mu, true)
-//                );
-//                var_dump(json_decode($response->getBody()->getContents())->result);
-//                die();
-//            case 'ddd':
-//                $response = $this->t->sendMessage(
-//                    $update->getMessage()->getChat()->getId(),
-//                    '*SALAM!*',
-//                    Telegram::MESSAGE_MARKDOWN,
-//                    $this->t->removeKeyBoard()
-//                );
-//                var_dump(json_decode($response->getBody()->getContents())->result);
-//                die();
-//            case 'ddd':
-//                $response = $this->t->sendMessage(
-//                    $update->getMessage()->getChat()->getId(),
-//                    '*SALAM!*',
-//                    Telegram::MESSAGE_MARKDOWN,
-//                    $this->t->forceReply()
-//                );
-//                var_dump(json_decode($response->getBody()->getContents())->result);
-//                die();
-        }
-    }
-
-    public function callbackQueryHandlers(Update $update)
-    {
-        switch ($update->getCallbackQuery()->getData()) {
-            case 'Callback_Data':
-                $mu = [
-                    [
-                        $this->t->buildInlineKeyboardButton('1', 'http://tb.app'),
-                        $this->t->buildInlineKeyboardButton('2', null, 'Callback_Data')
-                    ]
-                ];
-                $response = $this->t->sendMessage($update->getCallbackQuery()->getMessage()->getChat()->getId(), '_YYYYYY!_', Telegram::MESSAGE_MARKDOWN, $this->t->buildInlineKeyBoard($mu));
-                var_dump(json_decode($response->getBody()->getContents())->result);
-                die();
-        }
-    }
-
-    public function inlineQueryHandlers(Update $update)
-    {
-        switch ($update->getInlineQuery()->getQuery()) {
-            case '':
-            case '2':
-            case '3':
-                $response = $this->t->answerInlineQuery((string)$update->getInlineQuery()->getId(), json_encode([
-                    [
-                        'type' => 'article',
-                        'id' => '1',
-                        'title' => 'RRR',
-                        'input_message_content' => [
-                            'message_text' => 'EEE'
-                        ],
-                        'url' => 'http://yahoo.com'
-                    ],
-                    [
-                        'type' => 'article',
-                        'id' => '2',
-                        'title' => 'WWW',
-                        'input_message_content' => [
-                            'message_text' => 'EEE'
-                        ],
-                        'description' => 'aaaaaaaa ...',
-                        'thumb_url' => 'https://833b2618.ngrok.io/images/standoff.jpg'
-                    ]
-                ]));
-                var_dump(json_decode($response->getBody()->getContents())->result);
-                die();
+            $inlineQueryHandler = new InlineQueryHandler($update);
+            $inlineQueryHandler->handle();
         }
     }
 }

@@ -5,10 +5,11 @@ use App\Process;
 $loader = require 'vendor/autoload.php';
 include 'app/loader.php';
 
-$dotenv = new \Dotenv\Dotenv(__DIR__);
-$dotenv->load();
+$dotEnv = new \Dotenv\Dotenv(__DIR__);
+$dotEnv->load();
 
 define('TOKEN', getenv('TB_TOKEN'));
 
-$p = new Process();
-$p->init();
+$process = new Process();
+$process->constructor();
+$process->init();
