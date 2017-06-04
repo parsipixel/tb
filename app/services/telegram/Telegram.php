@@ -18,6 +18,7 @@ use GuzzleHttp\Psr7\Request;
 class Telegram extends TelegramTools
 {
     const GET_UPDATES = 'getUpdates';
+    const GET_CHAT = 'getChat';
     const SET_WEBHOOK = 'setWebhook';
     const DELETE_WEBHOOK = 'deleteWebhook';
     const SEND_MESSAGE = 'sendMessage';
@@ -59,12 +60,41 @@ class Telegram extends TelegramTools
      */
     public function getUpdates()
     {
-        $response = $this->client->send(new Request('get', $this->get(self::GET_UPDATES)));
+        $params = [];
+        $response = $this->client->send(new Request('post', $this->get(self::GET_UPDATES)), ['form_params' => $params]);
         $content = json_decode($response->getBody()->getContents());
         if ($response->getStatusCode() == 200 && $content->ok) {
             return $content;
         }
         return false;
+    }
+
+    /**
+     * @param $chatId
+     * @return bool|mixed
+     */
+    public function getChat($chatId)
+    {
+        $params = [
+            'chat_id' => $chatId
+        ];
+        $response = $this->client->send(new Request('post', $this->get(self::GET_CHAT)), ['form_params' => $params]);
+        return $response;
+    }
+
+    /**
+     * @param $chatId
+     * @param $messageId
+     * @return bool|mixed
+     */
+    public function deleteMessage($chatId, $messageId)
+    {
+        $params = [
+            'chat_id' => $chatId,
+            'message_id' => $messageId
+        ];
+        $response = $this->client->send(new Request('post', $this->get(self::DELETE_MESSAGE)), ['form_params' => $params]);
+        return $response;
     }
 
     /**

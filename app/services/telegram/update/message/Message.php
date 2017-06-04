@@ -34,6 +34,10 @@ class Message
      * @var string
      */
     private $text;
+    /**
+     * @var
+     */
+    private $entities;
 
     /**
      * Message constructor.
@@ -46,6 +50,7 @@ class Message
         $this->chat = new Chat((object)$message->chat);
         $this->date = $message->date;
         $this->text = $message->text;
+        $this->entities = property_exists($message, 'entities') ? $message->entities : null;
     }
 
     /**
@@ -126,5 +131,21 @@ class Message
     public function setText($text)
     {
         $this->text = $text;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEntities()
+    {
+        return $this->entities;
+    }
+
+    /**
+     * @param mixed $entities
+     */
+    public function setEntities($entities)
+    {
+        $this->entities = $entities;
     }
 }

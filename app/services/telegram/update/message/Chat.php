@@ -30,6 +30,10 @@ class Chat
      * @var string
      */
     private $type;
+    /**
+     * @var string
+     */
+    private $title;
 
     /**
      * Chat constructor.
@@ -38,8 +42,9 @@ class Chat
     public function __construct($chat)
     {
         $this->id = $chat->id;
-        $this->first_name = $chat->first_name;
-        $this->username = $chat->username;
+        $this->first_name = property_exists($chat, 'first_name') ? $chat->first_name : null;
+        $this->username = property_exists($chat, 'username') ? $chat->username : null;
+        $this->title = property_exists($chat, 'title') ? $chat->title : null;
         $this->type = $chat->type;
     }
 
@@ -105,5 +110,21 @@ class Chat
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param string $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
     }
 }

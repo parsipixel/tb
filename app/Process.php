@@ -28,13 +28,30 @@ class Process extends Services
     {
 //        $content = $this->t->getUpdates();
 //        if ($content) {
+////            var_dump($content->result);
+////            die();
 //            foreach ($content->result as $update) {
-//                $this->handle($update);
+//                try {
+//                    $this->handle($update);
+//                } catch (\Exception $e) {
+//                    $f = fopen('log.txt', 'a');
+//                    fputs($f, $e->getMessage() . PHP_EOL);
+//                    fclose($f);
+//                    var_dump($update);
+//                    echo $e->getMessage() . PHP_EOL;
+//                }
 //            }
 //        }
 
         $rawData = file_get_contents("php://input");
-        $this->handle((object)json_decode($rawData, true));
+        try {
+            $this->handle((object)json_decode($rawData, true));
+        } catch (\Exception $e) {
+            $f = fopen('log.txt', 'a');
+            fputs($f, $e->getMessage() . PHP_EOL);
+            fclose($f);
+            echo $e->getMessage() . PHP_EOL;
+        }
     }
 
     /**
@@ -56,6 +73,16 @@ class Process extends Services
 
     public function messageHandlers(Update $update)
     {
+        if ($update->getMessage()->getEntities()) {
+            foreach ($update->getMessage()->getEntities() as $entity) {
+                $entity = (object)$entity;
+                if ($entity->type == 'url') {
+                    $response = $this->t->deleteMessage($update->getMessage()->getChat()->getId(), $update->getMessage()->getMessageId());
+//                    var_dump(json_decode($response->getBody()->getContents())->result);
+//                    die();
+                }
+            }
+        }
         switch ($update->getMessage()->getText()) {
             case 'ddd':
                 $mu = [
@@ -66,22 +93,22 @@ class Process extends Services
                 ];
                 $response = $this->t->sendMessage($update->getMessage()->getChat()->getId(), '*SAdddLAM!*', Telegram::MESSAGE_MARKDOWN, $this->t->buildInlineKeyBoard($mu));
                 var_dump(json_decode($response->getBody()->getContents())->result);
-                die();
-            case 'Callback_Data':
-                $mu = [
-                    [
-                        $this->t->buildInlineKeyboardButton('text'),
-                        $this->t->buildInlineKeyboardButton('lol')
-                    ]
-                ];
-                $response = $this->t->sendMessage(
-                    $update->getMessage()->getChat()->getId(),
-                    '*CCC!*',
-                    Telegram::MESSAGE_MARKDOWN,
-                    $this->t->buildKeyBoard($mu, true)
-                );
-                var_dump(json_decode($response->getBody()->getContents())->result);
-                die();
+//                die();
+//            case 'Callback_Data':
+//                $mu = [
+//                    [
+//                        $this->t->buildInlineKeyboardButton('text'),
+//                        $this->t->buildInlineKeyboardButton('lol')
+//                    ]
+//                ];
+//                $response = $this->t->sendMessage(
+//                    $update->getMessage()->getChat()->getId(),
+//                    '*CCC!*',
+//                    Telegram::MESSAGE_MARKDOWN,
+//                    $this->t->buildKeyBoard($mu, true)
+//                );
+//                var_dump(json_decode($response->getBody()->getContents())->result);
+//                die();
 //            case 'ddd':
 //                $response = $this->t->sendMessage(
 //                    $update->getMessage()->getChat()->getId(),
