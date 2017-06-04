@@ -26,9 +26,7 @@ class Process extends Services
             try {
                 $this->handle((object)json_decode($rawData, true));
             } catch (\Exception $e) {
-                $f = fopen('log.txt', 'a');
-                fputs($f, $e->getMessage() . PHP_EOL);
-                fclose($f);
+                $this->logger->error($e->getMessage());
                 echo $e->getMessage() . PHP_EOL;
             }
         } else {
@@ -40,9 +38,7 @@ class Process extends Services
                     try {
                         $this->handle($update);
                     } catch (\Exception $e) {
-                        $f = fopen('log.txt', 'a');
-                        fputs($f, $e->getMessage() . PHP_EOL);
-                        fclose($f);
+                        $this->logger->error($e->getMessage());
                         var_dump($update);
                         echo $e->getMessage() . PHP_EOL;
                     }

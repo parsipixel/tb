@@ -8,6 +8,7 @@
 
 namespace App;
 
+use Apix\Log\Logger;
 use App\Services\Telegram\Telegram;
 
 /**
@@ -19,10 +20,15 @@ class Services
     /**
      * @var Telegram
      */
-    public $t;
+    protected $t;
+    /**
+     * @var Logger\File
+     */
+    protected $logger;
 
     public function constructor()
     {
         $this->t = new Telegram();
+        $this->logger = new Logger\File('logs/' . date('Y-m-d') . '.log');
     }
 }

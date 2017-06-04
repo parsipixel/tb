@@ -12,4 +12,4 @@ vendor/
 .idea/
 ngrok
 .env
-log.txt
+logs/

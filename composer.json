@@ -3,7 +3,8 @@
     "description": "Telegram bot",
     "require": {
         "guzzlehttp/guzzle": "~6.0",
-        "vlucas/phpdotenv": "^2.4"
+        "vlucas/phpdotenv": "^2.4",
+        "apix/log": "^1.2"
     },
     "require-dev": {
     },
