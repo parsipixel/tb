@@ -26,15 +26,15 @@ class Process extends Services
 
     public function init()
     {
-        $content = $this->t->getUpdates();
-        if ($content) {
-            foreach ($content->result as $update) {
-                $this->handle($update);
-            }
-        }
+//        $content = $this->t->getUpdates();
+//        if ($content) {
+//            foreach ($content->result as $update) {
+//                $this->handle($update);
+//            }
+//        }
 
-//        $rawData = file_get_contents("php://input");
-//        $this->handle((object)json_decode($rawData, true));
+        $rawData = file_get_contents("php://input");
+        $this->handle((object)json_decode($rawData, true));
     }
 
     /**
@@ -48,6 +48,9 @@ class Process extends Services
         } elseif (property_exists($update, 'callback_query')) {
             $update = new Update($update->update_id, null, $update->callback_query);
             $this->callbackQueryHandlers($update);
+        } elseif (property_exists($update, 'inline_query')) {
+            $update = new Update($update->update_id, null, null, $update->inline_query);
+            $this->inlineQueryHandlers($update);
         }
     }
 
@@ -111,6 +114,38 @@ class Process extends Services
                     ]
                 ];
                 $response = $this->t->sendMessage($update->getCallbackQuery()->getMessage()->getChat()->getId(), '_YYYYYY!_', Telegram::MESSAGE_MARKDOWN, $this->t->buildInlineKeyBoard($mu));
+                var_dump(json_decode($response->getBody()->getContents())->result);
+                die();
+        }
+    }
+
+    public function inlineQueryHandlers(Update $update)
+    {
+        switch ($update->getInlineQuery()->getQuery()) {
+            case '':
+            case '2':
+            case '3':
+                $response = $this->t->answerInlineQuery((string)$update->getInlineQuery()->getId(), json_encode([
+                    [
+                        'type' => 'article',
+                        'id' => '1',
+                        'title' => 'RRR',
+                        'input_message_content' => [
+                            'message_text' => 'EEE'
+                        ],
+                        'url' => 'http://yahoo.com'
+                    ],
+                    [
+                        'type' => 'article',
+                        'id' => '2',
+                        'title' => 'WWW',
+                        'input_message_content' => [
+                            'message_text' => 'EEE'
+                        ],
+                        'description' => 'aaaaaaaa ...',
+                        'thumb_url' => 'https://833b2618.ngrok.io/images/standoff.jpg'
+                    ]
+                ]));
                 var_dump(json_decode($response->getBody()->getContents())->result);
                 die();
         }

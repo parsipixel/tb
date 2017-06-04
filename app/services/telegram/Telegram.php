@@ -22,6 +22,7 @@ class Telegram extends TelegramTools
     const DELETE_WEBHOOK = 'deleteWebhook';
     const SEND_MESSAGE = 'sendMessage';
     const DELETE_MESSAGE = 'deleteMessage';
+    const ANSWER_INLINE_QUERY = 'answerInlineQuery';
 
     const MESSAGE_MARKDOWN = 'Markdown';
     const MESSAGE_HTML = 'HTML';
@@ -88,6 +89,16 @@ class Telegram extends TelegramTools
         }
 
         $response = $this->client->send(new Request('post', $this->get(self::SEND_MESSAGE)), ['form_params' => $params]);
+        return $response;
+    }
+
+    public function answerInlineQuery($inline_query_id, $results, $cache_time = null, $is_personal = null, $next_offset = null, $switch_pm_text = null, $switch_pm_paramete = null)
+    {
+        $params = [
+            'inline_query_id' => $inline_query_id,
+            'results' => $results
+        ];
+        $response = $this->client->send(new Request('post', $this->get(self::ANSWER_INLINE_QUERY)), ['form_params' => $params]);
         return $response;
     }
 }
