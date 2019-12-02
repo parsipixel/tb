@@ -1,3 +1,2 @@
-# tb
-test project for testing some test! ^_^
-Telegram bot without any framework!
+# TB
+This is a Telegram bot without any php framework!
